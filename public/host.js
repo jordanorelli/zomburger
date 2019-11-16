@@ -47,7 +47,7 @@ function windowResized() {
 }
 
 function draw () {
-  background(15);
+  background(255);
 
   if(isHostConnected(display=true)) {
     // Host/Game draw here. --->
@@ -73,7 +73,7 @@ function onClientConnect (data) {
     game.add(data.id,
             random(0.25*width, 0.75*width),
             random(0.25*height, 0.75*height),
-            60, 60
+            20, 20
     );
   }
 
@@ -154,6 +154,14 @@ class Game {
     this.numPlayers	= 0;
     this.id         = 0;
     this.colliders	= new Group();
+    this.frames = [
+      new Frame({
+        x: 100,
+        y: 100,
+        width: 200,
+        height: 200
+      })
+    ];
   }
 
   add (id, x, y, w, h) {
@@ -171,6 +179,7 @@ class Game {
   }
 
   draw() {
+    this.frames.forEach(f => f.draw());
     this.checkBounds();
     drawSprites();
   }
@@ -197,12 +206,12 @@ class Game {
   printPlayerIds (x, y) {
       push();
           noStroke();
-          fill(255);
+          fill(Colors.Blackish);
           textSize(16);
           text("# players: " + this.numPlayers, x, y);
 
           y = y + 16;
-          fill(200);
+          fill(Colors.Blackish);
           for (let id in this.players) {
               text(this.players[id].id, x, y);
               y += 16;
