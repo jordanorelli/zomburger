@@ -30,6 +30,7 @@ let game;
 
 function preload() {
   setupHost();
+  Images.loadAll();
 }
 
 function setup () {
@@ -47,7 +48,7 @@ function windowResized() {
 }
 
 function draw () {
-  background(255);
+  background(Colors.Sky);
 
   if(isHostConnected(display=true)) {
     // Host/Game draw here. --->
@@ -140,109 +141,5 @@ function processButton (data) {
   if (debug) {
     console.log(data.id + ': ' +
                 data.button);
-  }
-}
-
-////////////
-// Game
-// This simple placeholder game makes use of p5.play
-class Game {
-  constructor (w, h) {
-    this.w          = w;
-    this.h          = h;
-    this.players	= {};
-    this.numPlayers	= 0;
-    this.id         = 0;
-    this.colliders	= new Group();
-    this.frames = [
-      new Frame({
-        x: 100,
-        y: 100,
-        width: 200,
-        height: 200
-      })
-    ];
-  }
-
-  add (id, x, y, w, h) {
-    this.players[id] = createSprite(x, y, w, h);
-    this.players[id].id = "p"+this.id;
-    this.players[id].setCollider("rectangle", 0, 0, w, h);
-    this.players[id].color = color(255, 255, 255);
-    this.players[id].shapeColor = color(255, 255, 255);
-    this.players[id].scale = 1;
-    this.players[id].mass = 1;
-    this.colliders.add(this.players[id]);
-    print(this.players[id].id + " added.");
-    this.id++;
-    this.numPlayers++;
-  }
-
-  draw() {
-    this.frames.forEach(f => f.draw());
-    this.checkBounds();
-    drawSprites();
-  }
-
-  setColor (id, r, g, b) {
-    this.players[id].color = color(r, g, b);
-    this.players[id].shapeColor = color(r, g, b);
-
-    print(this.players[id].id + " color added.");
-  }
-
-  remove (id) {
-      this.colliders.remove(this.players[id]);
-      this.players[id].remove();
-      delete this.players[id];
-      this.numPlayers--;
-  }
-
-  checkId (id) {
-      if (id in this.players) { return true; }
-      else { return false; }
-  }
-
-  printPlayerIds (x, y) {
-      push();
-          noStroke();
-          fill(Colors.Blackish);
-          textSize(16);
-          text("# players: " + this.numPlayers, x, y);
-
-          y = y + 16;
-          fill(Colors.Blackish);
-          for (let id in this.players) {
-              text(this.players[id].id, x, y);
-              y += 16;
-          }
-
-      pop();
-  }
-
-  setVelocity(id, velx, vely) {
-      this.players[id].velocity.x = velx;
-      this.players[id].velocity.y = vely;
-  }
-
-  checkBounds() {
-      for (let id in this.players) {
-
-          if (this.players[id].position.x < 0) {
-              this.players[id].position.x = this.w - 1;
-          }
-
-          if (this.players[id].position.x > this.w) {
-              this.players[id].position.x = 1;
-          }
-
-          if (this.players[id].position.y < 0) {
-              this.players[id].position.y = this.h - 1;
-          }
-
-          if (this.players[id].position.y > this.h) {
-              this.players[id].position.y = 1;
-          }
-      }
   }
 }

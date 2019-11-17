@@ -1,9 +1,9 @@
 const Colors = {
-  Tan: "#D8BDB3",
-  DarkTan: "#A58072",
-  Blackish: "#262523",
-  Blood: "#8C021C",
-  Rust: "#590910",
+  Eggplant: "#26011C",
+  Purple: "#59024B",
+  Sky: "#05F2DB",
+  DarkGreen: "#038C33",
+  LightGreen: "#84D930",
 };
 
 ////////////
@@ -91,10 +91,10 @@ function onHostConnect (data) {
 // Displays server address in lower left of screen
 function displayAddress() {
   push();
-    fill(Colors.Blackish);
+    fill(Colors.Eggplant);
     noStroke();
     textSize(50);
-    text(serverIp+"/?="+roomId, 10, height-50);
+    text(serverIp+"/?="+roomId, 10, 50);
   pop();
 }
 
