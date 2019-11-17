@@ -125,14 +125,7 @@ function mousePressed() {
 ////////////
 // Input processing
 function processJoystick (data) {
-  
-  game.setVelocity(data.id, data.joystickX*velScale, -data.joystickY*velScale);
-
-  if (debug) {
-    console.log(data.id + ': {' +
-                data.joystickX + ',' +
-                data.joystickY + '}');
-  }
+  game.joystickInput(data.id, data.joystickX, data.joystickY);
 }
 
 function processButton (data) {

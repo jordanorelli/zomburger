@@ -11,7 +11,7 @@ class Game {
       minX: 0,
       maxX: w,
       minY: 0,
-      maxY: 100,
+      maxY: 0,
     });
     this.zombies    = [];
     this.store      = new Store();
@@ -19,22 +19,27 @@ class Game {
   }
 
   add (id, x, y, w, h) {
-    this.players[id] = createSprite(x, y, w, h);
-    this.players[id].id = "p"+this.id;
-    this.players[id].setCollider("rectangle", 0, 0, w, h);
-    this.players[id].color = color(255, 255, 255);
-    this.players[id].shapeColor = color(255, 255, 255);
-    this.players[id].scale = 1;
-    this.players[id].mass = 1;
-    this.colliders.add(this.players[id]);
-    print(this.players[id].id + " added.");
+    let player = new Player({
+      id: id,
+      x: x,
+      y: y,
+      width: w,
+      height: h,
+    })
+    this.players[id] = player;
+    // this.colliders.add(player.sprite);
+    print(player.id + " added.");
     this.id++;
     this.numPlayers++;
   }
 
   update() {
-    this.checkBounds();
+    // this.checkBounds();
     this.zombies.forEach(z => z.update());
+    for (let id in this.players) {
+      let player = this.players[id];
+      player.update();
+    }
     this.zombies = this.zombies.filter(z => !z.isDead());
   }
 
@@ -42,20 +47,24 @@ class Game {
     this.update();
     this.bank.draw(width*0.25 - 64, height - 128 - 32, 128, 128);
     this.store.draw(width*0.75 - 64, height - 128 - 32, 128, 128);
+    for (let id in this.players) {
+      let player = this.players[id];
+      player.draw();
+    }
     this.zombies.forEach(z => z.draw());
-    drawSprites();
+    // drawSprites();
   }
 
   setColor (id, r, g, b) {
-    this.players[id].color = color(r, g, b);
-    this.players[id].shapeColor = color(r, g, b);
+    // this.players[id].sprite.color = color(r, g, b);
+    // this.players[id].sprite.shapeColor = color(r, g, b);
 
     print(this.players[id].id + " color added.");
   }
 
   remove (id) {
-      this.colliders.remove(this.players[id]);
-      this.players[id].remove();
+      // this.colliders.remove(this.players[id].sprite);
+      // this.players[id].sprite.remove();
       delete this.players[id];
       this.numPlayers--;
   }
@@ -67,43 +76,45 @@ class Game {
 
   printPlayerIds (x, y) {
       push();
-          noStroke();
-          fill(Colors.Eggplant);
-          textSize(16);
-          text("# players: " + this.numPlayers, x, y);
+      noStroke();
+      fill(Colors.Eggplant);
+      textSize(16);
+      text("# players: " + this.numPlayers, x, y);
 
-          y = y + 16;
-          fill(Colors.Eggplant);
-          for (let id in this.players) {
-              text(this.players[id].id, x, y);
-              y += 16;
-          }
+      y = y + 16;
+      fill(Colors.Eggplant);
+      for (let id in this.players) {
+          text(this.players[id].id, x, y);
+          y += 16;
+      }
 
       pop();
   }
 
-  setVelocity(id, velx, vely) {
-      this.players[id].velocity.x = velx;
-      this.players[id].velocity.y = vely;
+  joystickInput(id, x, y) {
+    let player = this.players[id];
+    if (player) {
+      player.joystickInput(x, y);
+    }
   }
 
   checkBounds() {
       for (let id in this.players) {
 
-          if (this.players[id].position.x < 0) {
-              this.players[id].position.x = this.w - 1;
+          if (this.players[id].sprite.position.x < 0) {
+              this.players[id].sprite.position.x = this.w - 1;
           }
 
-          if (this.players[id].position.x > this.w) {
-              this.players[id].position.x = 1;
+          if (this.players[id].sprite.position.x > this.w) {
+              this.players[id].sprite.position.x = 1;
           }
 
-          if (this.players[id].position.y < 0) {
-              this.players[id].position.y = this.h - 1;
+          if (this.players[id].sprite.position.y < 0) {
+              this.players[id].sprite.position.y = this.h - 1;
           }
 
-          if (this.players[id].position.y > this.h) {
-              this.players[id].position.y = 1;
+          if (this.players[id].sprite.position.y > this.h) {
+              this.players[id].sprite.position.y = 1;
           }
       }
   }

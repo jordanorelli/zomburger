@@ -8,7 +8,7 @@ class Zombie {
   }
 
   update() {
-    this.y += 1;
+    this.y += (deltaTime / 1000) * 16;
   }
 
   draw() {

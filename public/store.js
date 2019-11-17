@@ -4,8 +4,8 @@ class Store {
   }
 
   draw(x, y, w, h) {
-    tint(Colors.Purple);
-    let purple = color(Colors.Purple);
+    tint(Colors.Eggplant);
+    let purple = color(Colors.Eggplant);
     noFill();
     stroke(purple);
     strokeWeight(2);

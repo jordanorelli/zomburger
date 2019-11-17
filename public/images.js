@@ -44,7 +44,7 @@ const Images = {
       loadImage("images/noun_Zombie_1322643.png"),
       loadImage("images/noun_Zombie_1322644.png")
     ];
-    this.playerAvatars = [
+    this.players = [
       loadImage("images/noun_Baby_851140.png"),
       loadImage("images/noun_Bear_812815.png"),
       loadImage("images/noun_cool_925419.png"),
