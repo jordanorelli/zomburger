@@ -1,21 +1,22 @@
 class Game {
   constructor (w, h) {
-    this.w          = w;
-    this.h          = h;
-    this.players	  = {};
+    this.w = w;
+    this.h = h;
+    this.players = {};
     this.numPlayers	= 0;
-    this.id         = 0;
-    this.spawner    = new ZombieSpawner({
+    this.id = 0;
+    this.spawner = new ZombieSpawner({
       game: this,
       minX: 0,
       maxX: w,
       minY: 0,
       maxY: 0,
     });
-    this.zombies    = [];
+    this.zombies = [];
     this.burgers = [];
-    this.store      = new Store();
-    this.bank       = new Bank();
+    this.moneys = [];
+    this.store = new Store();
+    this.bank = new Bank();
   }
 
   add (id, x, y, w, h) {
@@ -45,6 +46,9 @@ class Game {
       for (let zombie of this.zombies) {
         if (burger.overlaps(zombie)) {
           burger.kill();
+          let money = new Money(zombie.position.x, zombie.position.y);
+          this.moneys.push(money);
+          console.log(["adding money", money]);
           zombie.kill();
           break;
         }
@@ -65,6 +69,7 @@ class Game {
     }
     this.zombies.forEach(z => z.draw());
     this.burgers.forEach(b => b.draw());
+    this.moneys.forEach(m => m.draw());
   }
 
   remove (id) {
