@@ -48,15 +48,23 @@ class Player {
   }
 
   drawBurgerMeter() {
+    let half = {width: this.width*0.5, height: this.height*0.5};
+    let w = this.width;
+    let h = this.height * 0.2;
+    let x = this.position.x - half.width;
+    let y = this.position.y + half.height + this.height * 0.1;
+    let cellWidth = w / this.maxBurgers;
+
+    stroke(Colors.Purple);
+    strokeWeight(1);
+    noFill();
+    rect(x, y, w, h, 4);
+
     noStroke();
     fill(Colors.Purple);
-    let meterWidth = this.width;
-    let meterHeight = this.height * 0.2;
-    let cellWidth = meterWidth / this.maxBurgers;
     for (let i = 0; i < this.burgers; i++) {
-      let x = this.position.x - this.width * 0.5 + i * cellWidth;
-      let y = this.position.y + this.height + 10;
-      rect(x + cellWidth * 0.1, y, cellWidth*0.8, 10);
+      let cellX = x + i * cellWidth;
+      rect(cellX + cellWidth * 0.1, y + h*0.1, cellWidth*0.8, h*0.8);
     }
   }
 
@@ -68,7 +76,7 @@ class Player {
     let cellWidth = meterWidth / this.maxMoneys;
     for (let i = 0; i < this.moneys; i++) {
       let x = this.position.x - this.width * 0.5 + i * cellWidth;
-      let y = this.position.y + this.height + 30;
+      let y = this.position.y + this.height * 0.5 + 30;
       rect(x + cellWidth * 0.1, y, cellWidth*0.8, 10);
     }
   }

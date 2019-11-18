@@ -23,7 +23,7 @@ const local         = false;   // true if running locally, false
 // Global variables here. ---->
 
 const velScale	= 10;
-const debug = false;
+const debug = true;
 let game;
 
 // <----
