@@ -34,12 +34,25 @@ class Game {
   }
 
   update() {
+    this.burgers.forEach(b => b.update());
     this.zombies.forEach(z => z.update());
     for (let id in this.players) {
       let player = this.players[id];
       player.update();
     }
+
+    for (let burger of this.burgers) {
+      for (let zombie of this.zombies) {
+        if (burger.overlaps(zombie)) {
+          burger.kill();
+          zombie.kill();
+          break;
+        }
+      }
+    }
+
     this.zombies = this.zombies.filter(z => !z.isDead());
+    this.burgers = this.burgers.filter(b => !b.isDead());
   }
 
   draw() {
@@ -97,27 +110,6 @@ class Game {
     }
   }
 
-  checkBounds() {
-      for (let id in this.players) {
-
-          if (this.players[id].sprite.position.x < 0) {
-              this.players[id].sprite.position.x = this.w - 1;
-          }
-
-          if (this.players[id].sprite.position.x > this.w) {
-              this.players[id].sprite.position.x = 1;
-          }
-
-          if (this.players[id].sprite.position.y < 0) {
-              this.players[id].sprite.position.y = this.h - 1;
-          }
-
-          if (this.players[id].sprite.position.y > this.h) {
-              this.players[id].sprite.position.y = 1;
-          }
-      }
-  }
-
   addZombie(zombie) {
     this.zombies.push(zombie);
   }
@@ -125,7 +117,7 @@ class Game {
   addBurger(id) {
     let player = this.players[id];
     if (player) {
-      let burger = new Burger(player.sprite.position.x, player.sprite.position.y);
+      let burger = new Burger(player.position.x, player.position.y);
       console.log(["adding burger", burger]);
       this.burgers.push(burger);
     }

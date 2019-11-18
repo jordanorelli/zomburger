@@ -1,28 +1,52 @@
 class Zombie {
   constructor(options) {
     options = options || {};
-    this.x = options.x;
-    this.y = options.y;
+    this.position = {
+      x: options.x,
+      y: options.y
+    };
+    this.velocity = {
+      x: 0,
+      y: 16,
+    };
     this.image = random(Images.zombies);
     this.alive = true;
+    this.height = 64;
+    this.width = 64;
   }
 
   update() {
-    this.y += (deltaTime / 1000) * 16;
+    let dt = deltaTime / 1000;
+    this.position.x += this.velocity.x * dt;
+    this.position.y += this.velocity.y * dt;
   }
 
   draw() {
     tint(Colors.DarkGreen);
-    image(this.image, this.x, this.y, 64, 64);
-    strokeWeight(4);
-    stroke('#FF0000');
-    point(this.x, this.y);
+    image(this.image, this.position.x - 32, this.position.y - 32, 64, 64);
+    
+    if (debug) {
+      strokeWeight(4);
+      stroke('#FF0000');
+      point(this.position.x, this.position.y);
+      strokeWeight(1);
+      noFill();
+      rect(this.position.x - 32, this.position.y - 32, 64, 64);
+    }
+  }
+
+  kill() {
+    this.alive = false;
   }
 
   isDead() {
-    return !this.alive || this.y > height;
+    return !this.alive || this.outOfBounds();
   }
 }
+
+Zombie.prototype.bounds = bounds;
+Zombie.prototype.outOfBounds = outOfBounds;
+Zombie.prototype.overlaps = overlaps;
 
 class ZombieSpawner {
   constructor(options) {

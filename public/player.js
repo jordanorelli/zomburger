@@ -4,36 +4,40 @@ class Player {
     this.game = options.game;
     this.id = options.id;
     this.image = random(Images.players);
-    this.width = options.width;
-    this.height = options.height;
+    this.width = options.width || 64;
+    this.height = options.height || 64;
     this.burgers = 5;
-
-    let sprite = createSprite(options.x, options.y, options.width, options.height);
-    sprite.addImage(this.image);
-    sprite.setCollider("rectangle", 0, 0, options.width, options.height);
-    sprite.scale = 1;
-    sprite.mass = 1;
-    this.sprite = sprite;
-    this.joyX = 0;
-    this.joyY = 0;
+    this.position = {x: options.x, y: options.y};
+    this.velocity = {x: 0, y: 0};
   }
 
   update() {
-    this.sprite.velocity.x = this.joyX * 10;
-    this.sprite.velocity.y = this.joyY * -10;
+    let dt = deltaTime / 1000;
+    this.position.x += this.velocity.x * dt;
+    this.position.y += this.velocity.y * dt;
   }
 
   draw() {
+    let corner = {
+      x: this.position.x - this.width*0.5,
+      y: this.position.y - this.height*0.5
+    };
     tint(Colors.Purple);
-    image(this.image, this.sprite.position.x, this.sprite.position.y, 64, 64);
-    strokeWeight(4);
-    stroke('#FF0000');
-    point(this.sprite.position.x, this.sprite.position.y);
+    image(this.image, corner.x, corner.y, this.width, this.height);
+    if (debug) {
+      strokeWeight(4);
+      stroke('#FF0000');
+      point(this.position.x, this.position.y);
+
+      strokeWeight(1);
+      noFill();
+      rect(corner.x, corner.y, this.width, this.height);
+    }
   }
 
   joystickInput(x, y) {
-    this.joyX = x;
-    this.joyY = y;
+    this.velocity.x = x * 200;
+    this.velocity.y = y * -200;
   }
 
   buttonInput(val) {
@@ -48,3 +52,7 @@ class Player {
     }
   }
 }
+
+Player.prototype.bounds = bounds;
+Player.prototype.outOfBounds = outOfBounds;
+Player.prototype.overlaps = overlaps;

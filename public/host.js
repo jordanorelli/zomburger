@@ -74,7 +74,7 @@ function onClientConnect (data) {
     game.add(data.id,
             random(0.25*width, 0.75*width),
             random(0.25*height, 0.75*height),
-            20, 20
+            64, 64
     );
   }
 
