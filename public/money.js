@@ -25,6 +25,10 @@ class Money {
       rect(this.position.x - half.width, this.position.y - half.height, this.width, this.height);
     }
   }
+
+  kill() {
+    this.alive = false;
+  }
 }
 
 Money.prototype.bounds = bounds;

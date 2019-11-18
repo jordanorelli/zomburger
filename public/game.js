@@ -15,8 +15,18 @@ class Game {
     this.zombies = [];
     this.burgers = [];
     this.moneys = [];
-    this.store = new Store();
-    this.bank = new Bank();
+    this.store = new Store({
+      x: width * 0.25,
+      y: height - 128,
+      width: 128,
+      height: 128,
+    });
+    this.bank = new Bank({
+      x: width * 0.75,
+      y: height - 128,
+      width: 128,
+      height: 128,
+    });
   }
 
   add (id, x, y, w, h) {
@@ -37,9 +47,25 @@ class Game {
   update() {
     this.burgers.forEach(b => b.update());
     this.zombies.forEach(z => z.update());
+
     for (let id in this.players) {
       let player = this.players[id];
       player.update();
+
+      for (let zombie of this.zombies) {
+        if (player.overlaps(zombie)) {
+          zombie.kill();
+          player.kill();
+        }
+      }
+
+      for (let money of this.moneys) {
+        if (player.moneys < player.maxMoneys && player.overlaps(money)) {
+          money.kill();
+          player.moneys++;
+          console.log(["player picked up money", player]);
+        }
+      }
     }
 
     for (let burger of this.burgers) {
@@ -57,6 +83,7 @@ class Game {
 
     this.zombies = this.zombies.filter(z => !z.isDead());
     this.burgers = this.burgers.filter(b => !b.isDead());
+    this.moneys = this.moneys.filter(m => m.alive);
   }
 
   draw() {
@@ -70,6 +97,37 @@ class Game {
     this.zombies.forEach(z => z.draw());
     this.burgers.forEach(b => b.draw());
     this.moneys.forEach(m => m.draw());
+    this.drawScores();
+  }
+
+  drawScores() {
+    if (this.numPlayers == 0) {
+      return;
+    }
+
+    let x = 32;
+    let y = 90;
+    let rowHeight = 32;
+    let rowWidth = 128;
+
+    let row = 0;
+    for (let id in this.players) {
+      let player = this.players[id];
+      tint(Colors.Purple);
+      image(player.image, x, y + row * rowHeight, 32, 32);
+
+      textSize(24);
+      fill(Colors.Purple);
+      noStroke();
+      textAlign(LEFT, CENTER);
+      text(player.score, x + 32 + 10, y + rowHeight*0.5);
+      row++;
+    }
+
+    noFill();
+    stroke(Colors.Purple);
+    strokeWeight(2);
+    rect(x, y, rowWidth, rowHeight * row, 4, 4, 4, 4);
   }
 
   remove (id) {
@@ -82,29 +140,17 @@ class Game {
       else { return false; }
   }
 
-  printPlayerIds (x, y) {
-      push();
-      noStroke();
-      fill(Colors.Eggplant);
-      textSize(16);
-      text("# players: " + this.numPlayers, x, y);
-
-      y = y + 16;
-      fill(Colors.Eggplant);
-      for (let id in this.players) {
-          text(this.players[id].id, x, y);
-          y += 16;
-      }
-
-      pop();
-  }
-
   buttonInput(id, val) {
     console.log(["game sees button input", [id, val]]);
     let player = this.players[id];
-    if (player) {
-      console.log(["button input has player", player]);
-      player.buttonInput(val);
+    if (player && val) {
+      if (player.overlaps(this.store)) {
+        player.buyBurger();
+      } else if (player.overlaps(this.bank)) {
+        player.makeDeposit();
+      } else {
+        player.throwBurger();
+      }
     }
   }
 

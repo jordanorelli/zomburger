@@ -23,7 +23,7 @@ const local         = false;   // true if running locally, false
 // Global variables here. ---->
 
 const velScale	= 10;
-const debug = true;
+const debug = false;
 let game;
 
 // <----
@@ -52,9 +52,6 @@ function draw () {
 
   if(isHostConnected(display=true)) {
     // Host/Game draw here. --->
-
-    // Display player IDs in top left corner
-    game.printPlayerIds(5, 20);
 
     // Update and draw game objects
     game.draw();
