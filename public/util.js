@@ -22,6 +22,10 @@ function outOfBounds() {
 function bounds() {
   let halfWidth = this.width * 0.5;
   let halfHeight = this.height * 0.5;
+  if (this.hitbox) {
+    halfWidth = this.hitbox.width * 0.5;
+    halfHeight = this.hitbox.height * 0.5;
+  }
 
   return {
     min: {

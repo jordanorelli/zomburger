@@ -13,6 +13,10 @@ class Zombie {
     this.alive = true;
     this.height = 64;
     this.width = 64;
+    this.hitbox = {
+      width: this.width * 0.6,
+      height: this.height * 0.6,
+    };
   }
 
   update() {
@@ -22,8 +26,16 @@ class Zombie {
   }
 
   draw() {
+    let half = {
+      width: this.width * 0.5,
+      height: this.height * 0.5,
+    };
+    let corner = {
+      x: this.position.x - half.width,
+      y: this.position.y - half.height,
+    };
     tint(Colors.DarkGreen);
-    image(this.image, this.position.x - 32, this.position.y - 32, 64, 64);
+    image(this.image, corner.x, corner.y, this.width, this.height);
     
     if (debug) {
       strokeWeight(4);
@@ -31,7 +43,10 @@ class Zombie {
       point(this.position.x, this.position.y);
       strokeWeight(1);
       noFill();
-      rect(this.position.x - 32, this.position.y - 32, 64, 64);
+      rect(this.position.x - this.hitbox.width * 0.5,
+        this.position.y - this.hitbox.height * 0.5,
+        this.hitbox.width,
+        this.hitbox.height);
     }
   }
 

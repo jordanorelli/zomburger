@@ -5,16 +5,24 @@ class Money {
     this.velocity = {x: 0, y: 0};
     this.width = 32;
     this.height = 32;
+    this.hitbox = {
+      width: this.width * 0.6,
+      height: this.height * 0.6,
+    };
     this.alive = true;
   }
 
   draw() {
     let half = {
-      height: this.height * 0.5,
       width: this.width * 0.5,
+      height: this.height * 0.5,
+    };
+    let corner = {
+      x: this.position.x - half.width,
+      y: this.position.y - half.height,
     };
     tint(Colors.DarkGreen);
-    image(this.image, this.position.x - half.width, this.position.y - half.height, this.width, this.height);
+    image(this.image, corner.x, corner.y, this.width, this.height);
     
     if (debug) {
       strokeWeight(4);
@@ -22,7 +30,10 @@ class Money {
       point(this.position.x, this.position.y);
       strokeWeight(1);
       noFill();
-      rect(this.position.x - half.width, this.position.y - half.height, this.width, this.height);
+      rect(this.position.x - this.hitbox.width * 0.5,
+        this.position.y - this.hitbox.height * 0.5,
+        this.hitbox.width,
+        this.hitbox.height);
     }
   }
 

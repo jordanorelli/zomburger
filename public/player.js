@@ -6,6 +6,10 @@ class Player {
     this.image = random(Images.players);
     this.width = options.width || 64;
     this.height = options.height || 64;
+    this.hitbox = {
+      width: this.width * 0.6,
+      height: this.height * 0.6,
+    };
     this.burgers = 5;
     this.maxBurgers = 12;
     this.moneys = 0;
@@ -22,13 +26,13 @@ class Player {
   }
 
   draw() {
-    let corner = {
-      x: this.position.x - this.width*0.5,
-      y: this.position.y - this.height*0.5
-    };
     let half = {
       width: this.width * 0.5,
       height: this.height * 0.5,
+    };
+    let corner = {
+      x: this.position.x - half.width,
+      y: this.position.y - half.height,
     };
     tint(Colors.Purple);
     image(this.image, corner.x, corner.y, this.width, this.height);
@@ -43,41 +47,59 @@ class Player {
 
       strokeWeight(1);
       noFill();
-      rect(corner.x, corner.y, this.width, this.height);
+
+      rect(this.position.x - this.hitbox.width * 0.5,
+        this.position.y - this.hitbox.height * 0.5,
+        this.hitbox.width,
+        this.hitbox.height);
     }
   }
 
   drawBurgerMeter() {
     let half = {width: this.width*0.5, height: this.height*0.5};
-    let w = this.width;
-    let h = this.height * 0.2;
-    let x = this.position.x - half.width;
-    let y = this.position.y + half.height + this.height * 0.1;
-    let cellWidth = w / this.maxBurgers;
+    let box = {
+      w: 64,
+      h: 12,
+      x: this.position.x - half.width,
+      y: this.position.y + half.height,
+    }
 
     stroke(Colors.Purple);
     strokeWeight(1);
     noFill();
-    rect(x, y, w, h, 4);
+    rect(box.x, box.y, box.w, box.h, 4);
+
+    let cellWidth = (box.w-8) / this.maxBurgers;
 
     noStroke();
     fill(Colors.Purple);
     for (let i = 0; i < this.burgers; i++) {
-      let cellX = x + i * cellWidth;
-      rect(cellX + cellWidth * 0.1, y + h*0.1, cellWidth*0.8, h*0.8);
+      let cellX = box.x + 4 + i * cellWidth;
+      rect(cellX, box.y+2, cellWidth-1, 8);
     }
   }
 
   drawMoneyMeter() {
+    let half = {width: this.width*0.5, height: this.height*0.5};
+    let box = {
+      w: 64,
+      h: 12,
+      x: this.position.x - half.width,
+      y: this.position.y + half.height + 14,
+    }
+
+    stroke(Colors.DarkGreen);
+    strokeWeight(1);
+    noFill();
+    rect(box.x, box.y, box.w, box.h, 4);
+
+    let cellWidth = (box.w-8) / this.maxMoneys;
+
     noStroke();
     fill(Colors.DarkGreen);
-    let meterWidth = this.width;
-    let meterHeight = this.height * 0.2;
-    let cellWidth = meterWidth / this.maxMoneys;
     for (let i = 0; i < this.moneys; i++) {
-      let x = this.position.x - this.width * 0.5 + i * cellWidth;
-      let y = this.position.y + this.height * 0.5 + 30;
-      rect(x + cellWidth * 0.1, y, cellWidth*0.8, 10);
+      let cellX = box.x + 4 + i * cellWidth;
+      rect(cellX, box.y+2, cellWidth-1, 8);
     }
   }
 
