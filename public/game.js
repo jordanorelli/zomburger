@@ -5,7 +5,6 @@ class Game {
     this.players	  = {};
     this.numPlayers	= 0;
     this.id         = 0;
-    this.colliders	= new Group();
     this.spawner    = new ZombieSpawner({
       game: this,
       minX: 0,
@@ -14,12 +13,14 @@ class Game {
       maxY: 0,
     });
     this.zombies    = [];
+    this.burgers = [];
     this.store      = new Store();
     this.bank       = new Bank();
   }
 
   add (id, x, y, w, h) {
     let player = new Player({
+      game: this,
       id: id,
       x: x,
       y: y,
@@ -27,14 +28,12 @@ class Game {
       height: h,
     })
     this.players[id] = player;
-    // this.colliders.add(player.sprite);
     print(player.id + " added.");
     this.id++;
     this.numPlayers++;
   }
 
   update() {
-    // this.checkBounds();
     this.zombies.forEach(z => z.update());
     for (let id in this.players) {
       let player = this.players[id];
@@ -52,19 +51,10 @@ class Game {
       player.draw();
     }
     this.zombies.forEach(z => z.draw());
-    // drawSprites();
-  }
-
-  setColor (id, r, g, b) {
-    // this.players[id].sprite.color = color(r, g, b);
-    // this.players[id].sprite.shapeColor = color(r, g, b);
-
-    print(this.players[id].id + " color added.");
+    this.burgers.forEach(b => b.draw());
   }
 
   remove (id) {
-      // this.colliders.remove(this.players[id].sprite);
-      // this.players[id].sprite.remove();
       delete this.players[id];
       this.numPlayers--;
   }
@@ -89,6 +79,15 @@ class Game {
       }
 
       pop();
+  }
+
+  buttonInput(id, val) {
+    console.log(["game sees button input", [id, val]]);
+    let player = this.players[id];
+    if (player) {
+      console.log(["button input has player", player]);
+      player.buttonInput(val);
+    }
   }
 
   joystickInput(id, x, y) {
@@ -120,8 +119,16 @@ class Game {
   }
 
   addZombie(zombie) {
-    console.log(["adding zombie", zombie]);
     this.zombies.push(zombie);
+  }
+
+  addBurger(id) {
+    let player = this.players[id];
+    if (player) {
+      let burger = new Burger(player.sprite.position.x, player.sprite.position.y);
+      console.log(["adding burger", burger]);
+      this.burgers.push(burger);
+    }
   }
 }
 

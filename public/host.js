@@ -93,7 +93,7 @@ function onClientDisconnect (data) {
 
 function onReceiveData (data) {
   // Input data processing here. --->
-  console.log(data);
+  // console.log(data);
 
   if (data.type === 'joystick') {
     processJoystick(data);
@@ -102,7 +102,7 @@ function onReceiveData (data) {
     processButton(data);
   }
   else if (data.type === 'playerColor') {
-    game.setColor(data.id, data.r*255, data.g*255, data.b*255);
+    // game.setColor(data.id, data.r*255, data.g*255, data.b*255);
   }
 
   // <----
@@ -129,10 +129,6 @@ function processJoystick (data) {
 }
 
 function processButton (data) {
-  game.players[data.id].val = data.button;
-
-  if (debug) {
-    console.log(data.id + ': ' +
-                data.button);
-  }
+  console.log(data);
+  game.buttonInput(data.id, data.button);
 }

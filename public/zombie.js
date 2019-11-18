@@ -14,6 +14,9 @@ class Zombie {
   draw() {
     tint(Colors.DarkGreen);
     image(this.image, this.x, this.y, 64, 64);
+    strokeWeight(4);
+    stroke('#FF0000');
+    point(this.x, this.y);
   }
 
   isDead() {
@@ -36,7 +39,6 @@ class ZombieSpawner {
 
   planNextSpawn() {
     let t = random(this.minT, this.maxT);
-    console.log(`will add next zombie in ${t}`);
     this.nextSpawn = setTimeout(() => this.spawnZombie(), t);
   }
 

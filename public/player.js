@@ -1,10 +1,12 @@
 class Player {
   constructor(options) {
     options = options || {};
-    this.id = "p"+options.id;
+    this.game = options.game;
+    this.id = options.id;
     this.image = random(Images.players);
     this.width = options.width;
     this.height = options.height;
+    this.burgers = 5;
 
     let sprite = createSprite(options.x, options.y, options.width, options.height);
     sprite.addImage(this.image);
@@ -24,10 +26,25 @@ class Player {
   draw() {
     tint(Colors.Purple);
     image(this.image, this.sprite.position.x, this.sprite.position.y, 64, 64);
+    strokeWeight(4);
+    stroke('#FF0000');
+    point(this.sprite.position.x, this.sprite.position.y);
   }
 
   joystickInput(x, y) {
     this.joyX = x;
     this.joyY = y;
+  }
+
+  buttonInput(val) {
+    console.log(["player sees button input val", val]);
+    if (val) {
+      if (this.burgers > 0) {
+        this.burgers--;
+        this.game.addBurger(this.id);
+      } else {
+
+      }
+    }
   }
 }
