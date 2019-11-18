@@ -98,6 +98,10 @@ class Game {
     this.burgers.forEach(b => b.draw());
     this.moneys.forEach(m => m.draw());
     this.drawScores();
+
+    if (debug) {
+      this.drawEntityCounts();
+    }
   }
 
   drawScores() {
@@ -128,6 +132,30 @@ class Game {
     stroke(Colors.Purple);
     strokeWeight(2);
     rect(x, y, rowWidth, rowHeight * row, 4, 4, 4, 4);
+  }
+
+  drawEntityCounts() {
+    let x = width - 128;
+    let y = 32;
+    let w = 96;
+
+    let rows = [
+      ["players", Object.keys(this.players).length],
+      ["zombies", this.zombies.length],
+      ["burgers", this.burgers.length],
+      ["moneys", this.moneys.length],
+    ];
+
+    textSize(18);
+    noStroke();
+    fill("#FF0000");
+    for (let i = 0; i < rows.length; i++) {
+      let row = rows[i];
+      textAlign(RIGHT, BOTTOM);
+      text(row[0], x + w*0.5 - 8, y + i*20);
+      textAlign(LEFT, BOTTOM);
+      text(row[1], x + w*0.5 + 8, y + i*20);
+    }
   }
 
   remove (id) {
