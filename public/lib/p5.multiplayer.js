@@ -93,8 +93,9 @@ function displayAddress() {
   push();
     fill(Colors.Eggplant);
     noStroke();
-    textSize(50);
-    text(serverIp+"/?="+roomId, 10, 50);
+    textAlign(LEFT, BOTTOM);
+    textSize(32);
+    text(serverIp+"/?="+roomId, 8, 40);
   pop();
 }
 

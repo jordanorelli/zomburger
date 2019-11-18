@@ -104,7 +104,11 @@ class Player {
   }
 
   kill() {
-    // something here
+    this.score = 0;
+    this.moneys = 0;
+    this.burgers = 0;
+    this.position.x = random(width * 0.25, width * 0.75);
+    this.position.y = random(height * 0.75, height * 0.85);
   }
 
   joystickInput(x, y) {

@@ -23,7 +23,7 @@ const local         = false;   // true if running locally, false
 // Global variables here. ---->
 
 const velScale	= 10;
-const debug = true;
+const debug = false;
 let game;
 
 // <----
@@ -70,7 +70,7 @@ function onClientConnect (data) {
   if (!game.checkId(data.id)) {
     game.add(data.id,
             random(0.25*width, 0.75*width),
-            random(0.25*height, 0.75*height),
+            random(0.75*height, 0.85*height),
             64, 64
     );
   }

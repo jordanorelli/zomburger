@@ -109,22 +109,28 @@ class Game {
       return;
     }
 
-    let x = 32;
-    let y = 90;
+    let x = 16;
+    let y = 48;
     let rowHeight = 32;
     let rowWidth = 128;
 
-    let row = 0;
+    let scores = [];
     for (let id in this.players) {
       let player = this.players[id];
+      scores.push(player);
+    }
+    scores.sort((p1, p2) => { return p2.score - p1.score; });
+
+    let row = 0;
+    for (let player of scores) {
       tint(Colors.Purple);
       image(player.image, x, y + row * rowHeight, 32, 32);
 
       textSize(24);
       fill(Colors.Purple);
       noStroke();
-      textAlign(LEFT, CENTER);
-      text(player.score, x + 32 + 10, y + rowHeight*0.5);
+      textAlign(LEFT, TOP);
+      text(player.score, x + 42, y + row * rowHeight + 4);
       row++;
     }
 
